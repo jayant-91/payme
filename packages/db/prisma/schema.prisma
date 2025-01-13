@@ -4,53 +4,72 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("DATABASE_URL") // Database connection URL from environment variable
 }
 
 model User {
-  id                Int                 @id @default(autoincrement())
-  email             String?             @unique
-  name              String?
-  number            String              @unique
-  password          String
-  OnRampTransaction OnRampTransaction[]
-  Balance           Balance[]
-}
-
-model Merchant {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  name      String?
-  auth_type AuthType
-}
-
-model OnRampTransaction {
-  id        Int          @id @default(autoincrement())
-  status    OnRampStatus
-  token     String       @unique
-  provider  String
-  amount    Int
-  startTime DateTime
-  userId    Int
-  user      User         @relation(fields: [userId], references: [id])
+  id                Int                 @id @default(autoincrement()) // Primary key
+  email             String?             @unique // Optional and unique email
+  name              String?             // Optional name
+  number            String              @unique // Unique phone number
+  password          String              // User password
+  Balance           Balance?            // One-to-one relation with Balance
+  balanceId         Int?                @unique // Foreign key for the Balance relation
+  OnRampTransaction OnRampTransaction[] // One-to-many relation with OnRampTransaction
+  sentTransuction   Transaction[]       @relation(name: "FromUserReletion") // Transactions sent by the user
+  receivedTransuction   Transaction[]   @relation(name: "ToUserReletion") // Transactions received by the user
 }
 
 model Balance {
-  id     Int  @id @default(autoincrement())
-  userId Int  @unique
-  amount Int
-  locked Int
-  user   User @relation(fields: [userId], references: [id])
+  id            Int   @id @default(autoincrement()) // Primary key
+  amount        Int   // Total balance amount
+  locked        Int   // Amount locked (not available for use)
+  user          User  @relation(fields: [userId], references: [id]) // Relation with User
+  userId        Int   @unique // Foreign key for the User relation
 }
 
+model Merchant {
+  id            Int      @id @default(autoincrement()) // Primary key
+  email         String   @unique // Unique email for the merchant
+  name          String?  // Optional name for the merchant
+  auth_type     AuthType // Enum for authentication type (Google/Github)
+}
+
+model OnRampTransaction {
+  id            Int          @id @default(autoincrement()) // Primary key
+  status        OnRampStatus // Enum for transaction status
+  token         String       @unique // Unique token for the transaction
+  provider      String       // Payment provider name
+  amount        Int          // Transaction amount
+  startTime     DateTime     // Start time of the transaction
+  userId        Int          // Foreign key for the User relation
+  user          User         @relation(fields: [userId], references: [id]) // Relation with User
+}
+
+model Transaction {
+  id            Int     @id @default(autoincrement()) // Primary key
+  amount        Int     // Transaction amount
+  timestamp     DateTime // Timestamp of the transaction
+  
+  fromUserId    Int     // Foreign key for the sender user
+  fromUser      User    @relation(name: "FromUserReletion", fields: [fromUserId], references: [id]) // Relation with the sender
+  fromNumber    String
+
+  
+  toUserId      Int     // Foreign key for the recipient user
+  toUser        User    @relation(name: "ToUserReletion", fields: [toUserId], references: [id]) // Relation with the recipient
+  toNumber      String
+}
+
+// Enum for authentication types
 enum AuthType {
   Google
   Github
 }
 
+// Enum for transaction status
 enum OnRampStatus {
   Success
   Failure
   Processing
 }
-

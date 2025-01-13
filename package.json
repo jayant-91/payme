@@ -1,5 +1,5 @@
 {
-  "name": "payme",
+  "name": "week-18",
   "private": true,
   "scripts": {
     "build": "turbo build",
@@ -11,13 +11,12 @@
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
     "prettier": "^3.2.5",
-    "turbo": "^2.3.3",
-    "typescript": "5.5.4"
+    "turbo": "latest"
   },
   "engines": {
     "node": ">=18"
   },
-  "packageManager": "yarn@1.22.22",
+  "packageManager": "npm@10.2.4",
   "workspaces": [
     "apps/*",
     "packages/*"
