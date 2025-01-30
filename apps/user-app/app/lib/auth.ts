@@ -1,8 +1,8 @@
 import db from "@repo/db/client";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
-import { NextAuthOptions, Session, DefaultSession } from "next-auth";
-import { create } from "domain";
+import { NextAuthOptions, DefaultSession } from "next-auth";
+// import { create } from "domain";
 
 // Extend the default Session type to include a custom `id` field
 declare module "next-auth" {

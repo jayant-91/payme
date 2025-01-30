@@ -3,9 +3,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth";
 import prisma from "@repo/db/client";
-import { number } from "zod";
 import axios from "axios";
-
 
 
 export async function createOnRampTransaction(amount: number, provider: string) {
