@@ -2,8 +2,6 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth";
 import prisma from "@repo/db/client";
-import { error } from "console";
-import { unknown } from "zod";
 
 export async function sendMoney(to: string, amount: number) {
 	const session = await getServerSession(authOptions);
