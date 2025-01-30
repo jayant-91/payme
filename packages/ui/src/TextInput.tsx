@@ -1,7 +1,5 @@
 "use client"
 
-import { any } from "zod";
-
 export const TextInput = ({
     placeholder,
     onChange,
@@ -9,7 +7,7 @@ export const TextInput = ({
     type
 }: {
     placeholder: string;
-    onChange: (value: string) => void;
+    onChange: (_value: string) => void;
     label: string;
     type: string;
 }) => {
