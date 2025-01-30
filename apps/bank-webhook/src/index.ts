@@ -2,7 +2,7 @@ import express from "express";
 import db from "@repo/db/client";
 const app = express();
 
-// ci/cd workflow testing
+
 app.use(express.json());
 
 app.post("/hdfcwebhook", async (req, res) => {
